@@ -127,4 +127,37 @@ module.exports = function(grunt) {
 
 		});
 
+  grunt.registerMultiTask('skuid-page-pack', 
+    'Pull all the requested Skuid pages from Salesforce as a Page Pack',
+    function(){
+      var self = this, done = this.async();
+      var options = this.options({
+        'mode': 'single',
+        'redirectUri': 'http://localhost:3000/oauth/_callback',
+      });
+
+      if(_.isArray(options.module)) options.module = options.module.join(',');
+
+      var org = nforce.createConnection(helpers.getOrgOptions);
+      org.authenticate(nforce.getOrgCredentials)
+        .then(function(){
+          return org.apexRest({
+            'uri': apexEndpoint,
+            'method': 'GET',
+            'urlParams':{
+              'module': options.module,
+              'as': 'pagePack',
+            }
+          });
+        })
+        .then(function(results){
+          var results = JSON.stringify(results);
+          grunt.file.write(self.files[0].dest, JSON.stringify(results[options.module]));
+          grunt.log.ok('Page Pack pulled and written to ' + self.files[0].dest);
+
+        })
+        .error(function(error){
+          grunt.fail.fatal(error);
+        });
+    });
 };
