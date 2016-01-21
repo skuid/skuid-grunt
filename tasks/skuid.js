@@ -152,7 +152,8 @@ module.exports = function(grunt) {
         })
         .then(function(results){
           var results = JSON.stringify(results);
-          grunt.file.write(self.files[0].dest, JSON.stringify(results[options.module]));
+          grunt.file.write(self.files[0].dest, 
+            JSON.stringify(results[options.module]));
           grunt.log.ok('Page Pack pulled and written to ' + self.files[0].dest);
 
         })
