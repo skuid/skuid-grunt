@@ -63,7 +63,7 @@ exports.init = function(grunt){
 	    
 	    //if we pass in any extra nforce options, we should overwrite the defaults
 	    if(options.hasOwnProperty('nforceOptions')){
-	      org = _.extend(org, nforceOptions);
+	      org = _.extend(org, options.nforceOptions);
 	    }
 	    return org;
 	}
@@ -89,6 +89,11 @@ exports.init = function(grunt){
 
 	exports.getPageUniqueIdFromFilename = function(filename){
 		return filename.split('/').pop().split('.')[0];
+	}
+
+	exports.generateReport = function(reporter, dest, results){
+		var gen = require('./reporters/' + reporter);
+		grunt.file.write(dest + reporter + '.xml', pd.xml(gen(results)));
 	}
 
 	return exports;

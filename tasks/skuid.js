@@ -23,28 +23,27 @@ module.exports = function(grunt) {
 			var self = this,
 				done = this.async();
 
-      //ignore development pages is handled by your globbing pattern
-      //that you say the source files are
-      //['src/skuidpages/Skuid_*'] will pull only the Skuid module
-	 		var options = this.options({
+			//ignore development pages is handled by your globbing pattern
+			//that you say the source files are
+			//['src/skuidpages/Skuid_*'] will pull only the Skuid module
+			var options = this.options({
 				'mode': 'single',
 				'redirectUri': 'http://localhost:3000/oauth/_callback',
-        'deleted': [],
+				'deleted': [],
 			});
 
 			/*
 			  We have to do some checking of deleted and changed here but that
 			  will wait
 			 */
-			var files = helpers.readPageFiles(this.filesSrc);      
-      //support for CSV string as well as arrays, we prefer arrays
-      if(!_.isArray(options.deleted)) options.deleted = options.deleted.split(',');
-      if(options.deleted.length > 0){
-        var deletedPages = options.deleted.map(helpers.getPageUniqueIdFromFilename);  
-      }
-      
-      grunt.log.ok("Preparing to push the following files to your org:\n"
-        + this.filesSrc.join("\n"));
+			var files = helpers.readPageFiles(this.filesSrc);
+			//support for CSV string as well as arrays, we prefer arrays
+			if (!_.isArray(options.deleted)) options.deleted = options.deleted.split(',');
+			if (options.deleted.length > 0) {
+				var deletedPages = options.deleted.map(helpers.getPageUniqueIdFromFilename);
+			}
+
+			grunt.log.ok("Preparing to push the following files to your org:\n" + this.filesSrc.join("\n"));
 
 			var org = nforce.createConnection(helpers.getOrgOptions(options));
 			org.authenticate(helpers.getOrgCredentials(options))
@@ -54,7 +53,7 @@ module.exports = function(grunt) {
 						method: 'POST',
 						body: JSON.stringify({
 							changes: files || [],
-              deletions: deletedPages,
+							deletions: deletedPages,
 						})
 					});
 				})
@@ -111,10 +110,7 @@ module.exports = function(grunt) {
 					var response = JSON.parse(response);
 					if (!response.error) {
 						helpers.writeDefinitionFiles(response, self.files[0].dest);
-						grunt.log.ok('Success! Skuid pages for module(s) ' 
-              + options.module 
-              + ' written to ' 
-              + options.dir);
+						grunt.log.ok('Success! Skuid pages for module(s) ' + options.module + ' written to ' + options.dir);
 						done();
 					} else {
 						grunt.fail.fatal(response.error);
@@ -127,38 +123,39 @@ module.exports = function(grunt) {
 
 		});
 
-  grunt.registerMultiTask('skuid-page-pack', 
-    'Pull all the requested Skuid pages from Salesforce as a Page Pack',
-    function(){
-      var self = this, done = this.async();
-      var options = this.options({
-        'mode': 'single',
-        'redirectUri': 'http://localhost:3000/oauth/_callback',
-      });
+	grunt.registerMultiTask('skuid-page-pack',
+		'Pull all the requested Skuid pages from Salesforce as a Page Pack',
+		function() {
+			var self = this,
+				done = this.async();
+			var options = this.options({
+				'mode': 'single',
+				'redirectUri': 'http://localhost:3000/oauth/_callback',
+			});
 
-      if(_.isArray(options.module)) options.module = options.module.join(',');
+			if (_.isArray(options.module)) options.module = options.module.join(',');
 
-      var org = nforce.createConnection(helpers.getOrgOptions);
-      org.authenticate(nforce.getOrgCredentials)
-        .then(function(){
-          return org.apexRest({
-            'uri': apexEndpoint,
-            'method': 'GET',
-            'urlParams':{
-              'module': options.module,
-              'as': 'pagePack',
-            }
-          });
-        })
-        .then(function(results){
-          var results = JSON.stringify(results);
-          grunt.file.write(self.files[0].dest, 
-            JSON.stringify(results[options.module]));
-          grunt.log.ok('Page Pack pulled and written to ' + self.files[0].dest);
+			var org = nforce.createConnection(helpers.getOrgOptions);
+			org.authenticate(nforce.getOrgCredentials)
+				.then(function() {
+					return org.apexRest({
+						'uri': apexEndpoint,
+						'method': 'GET',
+						'urlParams': {
+							'module': options.module,
+							'as': 'pagePack',
+						}
+					});
+				})
+				.then(function(results) {
+					var results = JSON.stringify(results);
+					grunt.file.write(self.files[0].dest,
+						JSON.stringify(results[options.module]));
+					grunt.log.ok('Page Pack pulled and written to ' + self.files[0].dest);
 
-        })
-        .error(function(error){
-          grunt.fail.fatal(error);
-        });
-    });
+				})
+				.error(function(error) {
+					grunt.fail.fatal(error);
+				});
+		});
 };
