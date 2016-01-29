@@ -13,13 +13,15 @@ exports.init = function(grunt){
 		var filenameBase = pagedir + pagedef.uniqueId;
 		var xmlDef = {ext: '.xml', contents: pd.xml(pagedef.body)};
 		var metaDef = {
-			ext: '.json', 
+			ext: '.json',
 			contents: JSON.stringify(_.omit(pagedef, 'body'), null, 3)
 		};
 		_.each([xmlDef, metaDef], function(item){
 			var filename = filenameBase + item.ext;
 			grunt.file.write(filenameBase + item.ext, item.contents);
-			grunt.log.ok(filename + ' written to ' + pagedir);
+			if(grunt.option('verbose')){
+				grunt.log.ok(filename + ' written to ' + pagedir);
+			}
 		});
 	};
 
@@ -60,7 +62,7 @@ exports.init = function(grunt){
 	      'mode' : options.mode,
 	      'redirectUri': options.redirectUri
 	    };
-	    
+
 	    //if we pass in any extra nforce options, we should overwrite the defaults
 	    if(options.hasOwnProperty('nforceOptions')){
 	      org = _.extend(org, options.nforceOptions);
@@ -89,11 +91,6 @@ exports.init = function(grunt){
 
 	exports.getPageUniqueIdFromFilename = function(filename){
 		return filename.split('/').pop().split('.')[0];
-	}
-
-	exports.generateReport = function(reporter, dest, results){
-		var gen = require('./reporters/' + reporter);
-		grunt.file.write(dest + reporter + '.xml', pd.xml(gen(results)));
 	}
 
 	return exports;

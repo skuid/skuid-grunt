@@ -14,6 +14,7 @@ module.exports = function(grunt) {
 	// creation: http://gruntjs.com/creating-tasks
 	var nforce = require('nforce');
 	var _ = require('underscore');
+	var path = require('path');
 	var helpers = require('./lib/helpers').init(grunt);
 	var apexEndpoint = '/skuid/api/v1/pages';
 
@@ -32,10 +33,13 @@ module.exports = function(grunt) {
 				'deleted': [],
 			});
 
-			/*
-			  We have to do some checking of deleted and changed here but that
-			  will wait
-			 */
+			this.requiresConfig(
+				'skuid-push.options.username',
+				'skuid-push.options.password',
+				'skuid-push.options.clientId',
+				'skuid-push.options.clientSecret'
+			);
+
 			var files = helpers.readPageFiles(this.filesSrc);
 			//support for CSV string as well as arrays, we prefer arrays
 			if (!_.isArray(options.deleted)) options.deleted = options.deleted.split(',');
@@ -43,8 +47,9 @@ module.exports = function(grunt) {
 				var deletedPages = options.deleted.map(helpers.getPageUniqueIdFromFilename);
 			}
 
-			grunt.log.ok("Preparing to push the following files to your org:\n" + this.filesSrc.join("\n"));
-
+			if(grunt.option('verbose')){
+				grunt.log.ok("Preparing to push the following files to your org:\n" + this.filesSrc.join("\n"));
+			}
 			var org = nforce.createConnection(helpers.getOrgOptions(options));
 			org.authenticate(helpers.getOrgCredentials(options))
 				.then(function() {
@@ -79,19 +84,18 @@ module.exports = function(grunt) {
 				done = this.async();
 			//@todo figure out how to use this to prevent bad things
 			//from happening
-			this.requiresConfig(
-				// 'skuid-pull.options.dest'
-				// 'skuid-pull.password',
-				// 'skuid-pull.clientId',
-				// 'skuid-pull.clientSecret',
-				// 'skuid-pull.target.options.module'
-			);
-
 			var options = this.options({
+				'module': [],
+				'dest': 'src/skuidpages/',
 				'mode': 'single',
 				'redirectUri': 'http://localhost:3000/oauth/_callback',
 			});
-
+			this.requiresConfig(
+				'skuid-pull.options.username',
+				'skuid-pull.options.password',
+				'skuid-pull.options.clientId',
+				'skuid-pull.options.clientSecret'
+			);
 			if (_.isArray(options.module)) options.module = options.module.join(',');
 
 			var org = nforce.createConnection(helpers.getOrgOptions(options));
@@ -109,8 +113,8 @@ module.exports = function(grunt) {
 				.then(function(response) {
 					var response = JSON.parse(response);
 					if (!response.error) {
-						helpers.writeDefinitionFiles(response, self.files[0].dest);
-						grunt.log.ok('Success! Skuid pages for module(s) ' + options.module + ' written to ' + options.dir);
+						helpers.writeDefinitionFiles(response, path.join(options.dest));
+						grunt.log.ok('Success! Skuid pages for module(s) ' + options.module + ' written to ' + options.dest);
 						done();
 					} else {
 						grunt.fail.fatal(response.error);
@@ -131,12 +135,12 @@ module.exports = function(grunt) {
 			var options = this.options({
 				'mode': 'single',
 				'redirectUri': 'http://localhost:3000/oauth/_callback',
+				'human': true,
 			});
-
 			if (_.isArray(options.module)) options.module = options.module.join(',');
 
-			var org = nforce.createConnection(helpers.getOrgOptions);
-			org.authenticate(nforce.getOrgCredentials)
+			var org = nforce.createConnection(helpers.getOrgOptions(options));
+			org.authenticate(helpers.getOrgCredentials(options))
 				.then(function() {
 					return org.apexRest({
 						'uri': apexEndpoint,
@@ -148,10 +152,15 @@ module.exports = function(grunt) {
 					});
 				})
 				.then(function(results) {
-					var results = JSON.stringify(results);
-					grunt.file.write(self.files[0].dest,
-						JSON.stringify(results[options.module]));
-					grunt.log.ok('Page Pack pulled and written to ' + self.files[0].dest);
+					var results = JSON.parse(results);
+					_.each(results, function(pack, module){
+						var fp = options.dest + module + '.json';
+						grunt.file.write(fp, JSON.stringify(pack));
+						if(grunt.option('verbose')){
+							grunt.log.ok(module + 'page pack written to ' + fp);
+						}
+					});
+					grunt.log.ok('Page Pack pulled and written to ' + options.dest);
 
 				})
 				.error(function(error) {
