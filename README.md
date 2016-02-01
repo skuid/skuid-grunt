@@ -1,13 +1,16 @@
 #skuid-grunt
 
-**skuid-grunt** is a toolkit that enables developers working with Skuid extend their development processes to their Skuid pages.
+**skuid-grunt** is a toolkit that enables developers working with Skuid to extend their development processes to their Skuid pages.
 
 ##Purpose
 At Skuid, we eat our own dogfood. The Skuid interface is built using the very software we produce. **skuid-grunt** was born to help our developers easily version and release Skuid pages. Not only does this support our development process, but it also affords you, our customer, the unique opportunity to bring your Skuid pages into the same source control as the rest of your Salesforce code.
 
+##How it works
+With the release of Banzai Update 7, the Skuid app now includes a REST API for working with Skuid pages. This API gives you a way to "push" and "pull" Skuid pages to and from any org with Banzai Update 7 (or above) installed. When pulling your Skuid pages, 2 files will be created in the directory you specify; a JSON file and an XML file. See the ```skuid-pull``` task for further information. These files can then be used to push your Skuid pages into the same or any other org running Skuid.
+
 ##Features
-* Pull Skuid pages from a specified org into your local filesystem
-* Push Skuid pages from a local filesystem to any Salesforce org running Skuid
+* Pull Skuid pages from a specified org into your local filesystem.
+* Push Skuid pages from a local filesystem to any Salesforce org running Banzai Update 7 or above.
 * Generate a Skuid Page Pack that can be shared across orgs.
 
 ##Requirements
@@ -25,28 +28,26 @@ $ npm install skuid-grunt
 ##Example Gruntfile
 ```js
 module.exports = function(grunt){
+  var orgOptions = {
+    'clientId': 'demoCliId',
+    'clientSecret': 'demoCliSec',
+    'username': 'demoUsrnm',
+    'password': 'demoPasswd'
+  };
   grunt.initConfig({
     'skuid-pull':{
+      'options': orgOptions,
       'dev':{
         options:{
           'dest': 'src/skuidpages/',
-          'clientId': 'demoCliId',
-          'clientSecret': 'demoCliSec',
-          'username': 'demoUsrnm',
-          'password': 'demoPasswd',
           'module':['Module1'], //can be array or CSV
         }
       }  
     },
     'skuid-push':{
+      'options': orgOptions,
       'production':{
-         src: ['src/skuidpages/Module1*'],
-         options:{
-          'clientId': 'demoCliId',
-          'clientSecret': 'demoCliSec',
-          'username': 'demoUsrnm',
-          'password': 'demoPasswd',
-        }
+         src: ['src/skuidpages/Module1*']
       }
     }
   });
@@ -58,6 +59,8 @@ module.exports = function(grunt){
   grunt.loadNpmTasks('skuid-grunt');
 }
 ```
+
+*[Visit this link for more info about configuring Grunt Tasks](http://gruntjs.com/configuring-tasks)* 
 
 ##Task Configuration
 
@@ -81,4 +84,5 @@ Push Skuid pages from your local directory whether you just pulled them down or 
 * ```options.nforceOptions```: [Object|Optional] Any additional [nforce](https://github.com/kevinohara80/nforce) options you wish to use
 
 ###skuid-page-pack
+*Documentation soon to come*
 
