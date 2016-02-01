@@ -140,6 +140,8 @@ module.exports = function(grunt) {
 				'mode': 'single',
 				'redirectUri': 'http://localhost:3000/oauth/_callback',
 				'human': true,
+				'extension': 'json',
+				'nameMap':{},
 			});
 			if (_.isArray(options.module)){
 				options.module = options.module.join(',');	
@@ -160,7 +162,11 @@ module.exports = function(grunt) {
 				.then(function(results) {
 					results = JSON.parse(results);
 					_.each(results, function(pack, module){
-						var fp = options.dest + module + '.json';
+						var name = module;
+						if(options.nameMap.hasOwnProperty(module)){
+							name = options.nameMap[module];
+						}
+						var fp = options.dest + name + '.' + options.extension;
 						grunt.file.write(fp, JSON.stringify(pack));
 						if(grunt.option('verbose')){
 							grunt.log.ok(module + 'page pack written to ' + fp);
