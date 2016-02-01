@@ -52,7 +52,7 @@ module.exports = function(grunt){
     }
   });
 
-  //task that will pull your Skuid pages from a developer org and push them
+  //task that will pull your Skuid pages for Module1 from a developer org and push them
   //right into a production org
   grunt.registerTask('to-production', ['skuid-pull:dev', 'skuid-push:production']);
 
@@ -66,6 +66,7 @@ module.exports = function(grunt){
 
 ###skuid-pull
 Pull Skuid pages from any Salesforce org with Skuid installed. This task will create 2 files per Skuid page for each module you specify. These files will be named ```ModuleName_PageName.json``` & ```ModuleName_PageName.xml```. The XML file is your Skuid page. You can copy that file and paste it directly into the Skuid XML Editor. The JSON file is additional metadata about your Skuid page that will be used in the **skuid-push** task.
+
 * ```options.dest```: [String|Optional] The target directory where your page files will be written
 * ```options.clientId```: [String|Required] The OAuth Client Id of the org you wish to connect
 * ```options.clientSecret```: [String|Required] The OAuth Client Secret of the org you wish to connect
@@ -76,6 +77,7 @@ Pull Skuid pages from any Salesforce org with Skuid installed. This task will cr
 
 ###skuid-push
 Push Skuid pages from your local directory whether you just pulled them down or have checked out your code from source control. This task will take the page definitions that you specify in ```src``` and push them to your Salesforce org. Once the task is finished, you can log into you org and begin working directly on those pages!
+
 * ```src```: [String or Array|Required] Path to directory that stores your Skuid page definitions, [examples here](http://gruntjs.com/configuring-tasks#files)
 * ```options.clientId```: [String|Required] The OAuth Client Id of the org you wish to connect
 * ```options.clientSecret```: [String|Required] The OAuth Client Secret of the org you wish to connect
