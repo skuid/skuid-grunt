@@ -42,7 +42,9 @@ module.exports = function(grunt) {
 
 			var files = helpers.readPageFiles(this.filesSrc);
 			//support for CSV string as well as arrays, we prefer arrays
-			if (!_.isArray(options.deleted)) options.deleted = options.deleted.split(',');
+			if (!_.isArray(options.deleted)){
+				options.deleted = options.deleted.split(',');	
+			} 
 			if (options.deleted.length > 0) {
 				var deletedPages = options.deleted.map(helpers.getPageUniqueIdFromFilename);
 			}
@@ -63,7 +65,7 @@ module.exports = function(grunt) {
 					});
 				})
 				.then(function(response) {
-					var response = JSON.parse(response);
+					response = JSON.parse(response);
 					if (!response.success) {
 						grunt.fail.fatal(JSON.stringify(response));
 					} else {
@@ -96,7 +98,9 @@ module.exports = function(grunt) {
 				'skuid-pull.options.clientId',
 				'skuid-pull.options.clientSecret'
 			);
-			if (_.isArray(options.module)) options.module = options.module.join(',');
+			if (_.isArray(options.module)){
+				options.module = options.module.join(',');	
+			} 
 
 			var org = nforce.createConnection(helpers.getOrgOptions(options));
 
@@ -111,7 +115,7 @@ module.exports = function(grunt) {
 					});
 				})
 				.then(function(response) {
-					var response = JSON.parse(response);
+					response = JSON.parse(response);
 					if (!response.error) {
 						helpers.writeDefinitionFiles(response, path.join(options.dest));
 						grunt.log.ok('Success! Skuid pages for module(s) ' + options.module + ' written to ' + options.dest);
@@ -137,7 +141,9 @@ module.exports = function(grunt) {
 				'redirectUri': 'http://localhost:3000/oauth/_callback',
 				'human': true,
 			});
-			if (_.isArray(options.module)) options.module = options.module.join(',');
+			if (_.isArray(options.module)){
+				options.module = options.module.join(',');	
+			} 
 
 			var org = nforce.createConnection(helpers.getOrgOptions(options));
 			org.authenticate(helpers.getOrgCredentials(options))
@@ -152,7 +158,7 @@ module.exports = function(grunt) {
 					});
 				})
 				.then(function(results) {
-					var results = JSON.parse(results);
+					results = JSON.parse(results);
 					_.each(results, function(pack, module){
 						var fp = options.dest + module + '.json';
 						grunt.file.write(fp, JSON.stringify(pack));
