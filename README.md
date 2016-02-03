@@ -86,5 +86,20 @@ Push Skuid pages from your local directory whether you just pulled them down or 
 * ```options.nforceOptions```: [Object|Optional] Any additional [nforce](https://github.com/kevinohara80/nforce) options you wish to use
 
 ###skuid-page-pack
-*Documentation soon to come*
+The configuration for this task is the same as ```skuid-pull```, however, the resulting file will be in the Page Pack format. This is a condensed format that can be included as a Static Resource. For information about how to use Page Packs with Skuid visit [this link](http://help.skuidify.com/m/page-assignments-and-overrides/l/245955-import-export-page-packs-and-modules). There are 2 extra options to use with this task. They are:
+* ```options.extension```: [String|Optional] defaults to ```.json```. The extension that will be applied to the file. Use ```.resource``` for Static Resource format.
+* ```options.nameMap```: [Object|Optional] Create a map from module name to desired filename. Example:
+```js
+
+{
+  'skuid-page-pack':{
+    'options':{
+      'nameMap': {
+        'Module1': 'Module1Filename'
+      } 
+    }
+  }
+}
+
+```
 
