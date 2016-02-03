@@ -47,7 +47,9 @@ module.exports = function(grunt){
     'skuid-push':{
       'options': orgOptions,
       'production':{
-         src: ['src/skuidpages/Module1*']
+         'files':{
+            src: ['src/skuidpages/Module1*']
+         }
       }
     }
   });
@@ -78,7 +80,7 @@ Pull Skuid pages from any Salesforce org with Skuid installed. This task will cr
 ###skuid-push
 Push Skuid pages from your local directory whether you just pulled them down or have checked out your code from source control. This task will take the page definitions that you specify in ```src``` and push them to your Salesforce org. Once the task is finished, you can log into you org and begin working directly on those pages!
 
-* ```src```: [String or Array|Required] Path to directory that stores your Skuid page definitions, [examples here](http://gruntjs.com/configuring-tasks#files)
+* ```files.src```: [String or Array|Required] Path to directory that stores your Skuid page definitions, [examples here](http://gruntjs.com/configuring-tasks#files)
 * ```options.clientId```: [String|Required] The OAuth Client Id of the org you wish to connect
 * ```options.clientSecret```: [String|Required] The OAuth Client Secret of the org you wish to connect
 * ```options.username```: [String|Required] The username of the org you wish to connect
