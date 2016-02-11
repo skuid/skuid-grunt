@@ -54,8 +54,8 @@ module.exports = function(grunt){
       'options': orgOptions,
       'dev':{
         options:{
-          'dest': 'src/skuidpages/',
-          'module':['Module1'], //can be array or CSV
+          'dest': 'skuidpages/',
+          'module':['Module1'], //can be array or comma separated values
         }
       }  
     },
@@ -63,7 +63,7 @@ module.exports = function(grunt){
       'options': orgOptions,
       'production':{
          'files':{
-            src: ['src/skuidpages/Module1*']
+            src: ['skuidpages/Module1*']
          }
       }
     }
