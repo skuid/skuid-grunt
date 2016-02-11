@@ -1,7 +1,7 @@
 {
   "name": "skuid-grunt",
   "description": "Grunt tasks to support developer tasks for Skuid",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "homepage": "https://bitbucket.org/skuid/skuid-grunt",
   "author": {
     "name": "Ethan Rogers",
