@@ -9,13 +9,14 @@ At Skuid, we eat our own dogfood. The Skuid interface is built using the very so
 With the release of Banzai Update 7, the Skuid app now includes a REST API for working with Skuid pages. This API gives you a way to "push" and "pull" Skuid pages to and from any org with Banzai Update 7 (or above) installed. When pulling your Skuid pages, 2 files will be created in the directory you specify; a JSON file and an XML file. See the ```skuid-pull``` task for further information. These files can then be used to push your Skuid pages into the same or any other org running Skuid.
 
 ##Features
-* Pull Skuid pages from a specified org into your local filesystem.
-* Push Skuid pages from a local filesystem to any Salesforce org running Banzai Update 7 or above.
+* Pull Skuid pages from any Salesforce org into your local filesystem.
+* Push Skuid pages from a local filesystem to any Salesforce org.
 * Generate a Skuid Page Pack that can be shared across orgs.
 
 ##Requirements
 * [Grunt](http://gruntjs.com/)
 * [Node.js](https://nodejs.org/)
+* [Skuid Banzai Update 7 (v7.31 or higher)](http://www.skuidify.com/SkuidReleases) - installed in Salesforce orgs being pulled from AND pushed to
 
 ##Getting Started
 Before installing **skuid-grunt**, make sure that you have the above requirements installed.
