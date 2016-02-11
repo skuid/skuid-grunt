@@ -14,21 +14,35 @@ With the release of Banzai Update 7, the Skuid app now includes a REST API for w
 * Generate a Skuid Page Pack that can be shared across orgs.
 
 ##Requirements
-* [Grunt](http://gruntjs.com/)
+
 * [Node.js](https://nodejs.org/)
+* [Grunt](http://gruntjs.com/getting-started)
 * [Skuid Banzai Update 7 (v7.31 or higher)](http://www.skuidify.com/SkuidReleases) - installed in Salesforce orgs being pulled from AND pushed to
 
-##Getting Started
-Before installing **skuid-grunt**, make sure that you have the above requirements installed.
+Before installing **skuid-grunt**, make sure that you have the above requirements installed. We also assume that you are using [MavensMate](http://mavensmate.com/) or the [Force.com IDE](https://developer.salesforce.com/page/Force.com_IDE_Installation) to do local Force.com development. You will need to get Grunt setup in your Force.com project's root directory, following the steps described in [Grunt's Getting Started guide](http://gruntjs.com/getting-started) to get a ```Gruntfile.js``` and a ```package.json``` setup in this diectory. 
 
-Install **skuid-grunt**
+You must also have a Salesforce **Connected App** setup in order for **skuid-grunt** to communicate with Salesforce via OAuth's Resource Owner Password Credentials flow. See [this tutorial](https://help.salesforce.com/apex/HTViewHelpDoc?id=connected_app_create.htm) for setting up a Salesforce Connected App - you only need to fill out the "Basic Information" and "API (Enable OAuth Settings)" sections. Click "Enable OAuth Settings" and for "Callback URL", enter ```https://localhost:3000``` (skuid-grunt will be using nforce to connect to Salesforce with the OAuth Resource Owner Password Credentials flow, so technically the Callback URL is irrelevant, but you need to specify at least one URL to create a Connected App). For "Selected OAuth Scopes", choose "Access and manage your data (api)".
+
+Once you've saved your Connected App, you'll be presented with fields containing your newly-created OAuth client's "Consumer Key" and "Consumer Secret". You'll need to copy and paste these into your Gruntfile in the ```orgOptions``` object's ```clientId``` and ```clientSecret``` properties, respectively. 
+
+##Installation
+From your Force.com project's root directory, run the following to install **skuid-grunt**:
+
 ```bash
-$ npm install skuid-grunt
+$ npm install skuid-grunt --save-dev
 ```
 
-##Example Gruntfile
+##Setup
+Next, you'll need to create a Gruntfile (or modify your existing one) to configure **skuid-grunt** and add Grunt tasks.
+
+###Example Gruntfile
 ```js
 module.exports = function(grunt){
+  /*
+   * Enter the OAuth client and user-specific credentials needed to connect to Salesforce.
+   * Alternatively, store this information in environment variables, e.g.
+   *    'clientId': process.env.SKUID_GRUNT_CLIENT_ID
+   */
   var orgOptions = {
     'clientId': 'demoCliId',
     'clientSecret': 'demoCliSec',
@@ -64,6 +78,22 @@ module.exports = function(grunt){
 ```
 
 *[Visit this link for more info about configuring Grunt Tasks](http://gruntjs.com/configuring-tasks)* 
+
+##Running skuid-grunt
+
+###Retrieving Skuid Pages from an org
+
+```bash
+$ grunt skuid-pull:dev
+```
+Assuming the above Gruntfile, all Skuid Pages in module `Module1` will be pulled down into your Force.com project into a `skuidpages` directory. This is entirely customizable: you can pull the pages into whatever directory you'd like.
+
+###Pushing Skuid Pages into an org
+
+```bash
+$ grunt skuid-push:production
+```
+Assuming the above Gruntfile, all Skuid Pages in module `Module1` in your skuidpages/ directory will be pushed into the target org. Pages are uniquely identified by their Unique Id field. Any pages that do not exist in the destination org will be created; existing pages will be updated.
 
 ##Task Configuration
 
