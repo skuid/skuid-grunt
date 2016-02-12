@@ -31,13 +31,13 @@ exports.init = function(grunt){
 			grunt.file.readJSON(filepath, {'encoding': 'UTF-8'}),
 			{body: grunt.file.read(filepath.replace('.json', '.xml'), {'encoding': 'UTF-8'})}
 		);
-	}
+	};
 
 	var filterOutUnneededFiles = function(filelist){
 		return filelist.filter(function(file){
-			return file.indexOf('.json') != -1;
+			return file.indexOf('.json') !== -1;
 		});
-	}
+	};
 	/**
 	 * Helper method for setting up the org credentials
 	 * @param  {[type]} options [description]
@@ -48,7 +48,7 @@ exports.init = function(grunt){
 			username: options.username,
 			password: options.password
 		};
-	}
+	};
 	/**
 	 * Helper method for setting up the org options.
 	 * Handles any extra nforce options passed in as config
@@ -68,7 +68,7 @@ exports.init = function(grunt){
 	      org = _.extend(org, options.nforceOptions);
 	    }
 	    return org;
-	}
+	};
 
 	/**
 	 * Write definition files for a response from the RestService_Page class
@@ -80,18 +80,29 @@ exports.init = function(grunt){
 		_.each(apexResponse, function(item){
 			writePageFile(item, targetDir);
 		});
-	}
+	};
 
 
 	exports.readPageFiles = function(fileSources){
 		//filter out the xml files from the filelist
 		fileSources = filterOutUnneededFiles(fileSources);
 		return fileSources.map(readPageFile);
-	}
+	};
 
 	exports.getPageUniqueIdFromFilename = function(filename){
 		return filename.split('/').pop().split('.')[0];
-	}
+	};
+
+	exports.validateRequiredOptions = function(reqOpts, options){
+		var keys = _.keys(options);
+		var missing = reqOpts.filter(function(option){
+			return keys.indexOf(option) === -1;
+				
+		});
+		if(missing.length > 0){
+			grunt.fail.fatal('Required options missing: ' + missing.join(', '));
+		}
+	};
 
 	return exports;
-}
+};

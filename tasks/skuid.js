@@ -33,18 +33,12 @@ module.exports = function(grunt) {
 				'deleted': [],
 			});
 
-			this.requiresConfig(
-				'skuid-push.options.username',
-				'skuid-push.options.password',
-				'skuid-push.options.clientId',
-				'skuid-push.options.clientSecret'
-			);
-
+			helpers.validateRequiredOptions(['username','password','clientId', 'clientSecret'], options);
 			var files = helpers.readPageFiles(this.filesSrc);
 			//support for CSV string as well as arrays, we prefer arrays
 			if (!_.isArray(options.deleted)){
-				options.deleted = options.deleted.split(',');	
-			} 
+				options.deleted = options.deleted.split(',');
+			}
 			if (options.deleted.length > 0) {
 				var deletedPages = options.deleted.map(helpers.getPageUniqueIdFromFilename);
 			}
@@ -92,15 +86,11 @@ module.exports = function(grunt) {
 				'mode': 'single',
 				'redirectUri': 'http://localhost:3000/oauth/_callback',
 			});
-			this.requiresConfig(
-				'skuid-pull.options.username',
-				'skuid-pull.options.password',
-				'skuid-pull.options.clientId',
-				'skuid-pull.options.clientSecret'
-			);
+			
+			helpers.validateRequiredOptions(['username','password','clientId', 'clientSecret'], options);
 			if (_.isArray(options.module)){
-				options.module = options.module.join(',');	
-			} 
+				options.module = options.module.join(',');
+			}
 
 			var org = nforce.createConnection(helpers.getOrgOptions(options));
 
@@ -144,8 +134,8 @@ module.exports = function(grunt) {
 				'nameMap':{},
 			});
 			if (_.isArray(options.module)){
-				options.module = options.module.join(',');	
-			} 
+				options.module = options.module.join(',');
+			}
 
 			var org = nforce.createConnection(helpers.getOrgOptions(options));
 			org.authenticate(helpers.getOrgCredentials(options))
