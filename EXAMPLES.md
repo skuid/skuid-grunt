@@ -1,12 +1,12 @@
 #Example configurations for skuid-grunt
 
-These are just a few examples of how you could configure skuid-grunt to push and pull your Skuid Pages between orgs. They have been written as 'drop in' Gruntfiles, but can be deconstructed and used in any Gruntfile. 
+These are just a few examples of how you could configure skuid-grunt to push and pull your Skuid Pages between orgs. They have been written as 'drop in' Gruntfiles, but can be deconstructed and used in any Gruntfile.
 
 ### Pull from ONE developer org and deploy to MULTIPLE production orgs
 ```bash
 $ grunt push-multi
 ```
-The following example demonstrates how skuid-grunt can be used for automated deployments to multiple orgs. For example, you might see this in a CD (Continuous Deployment) process which pulls pages from a developer org and pushes them out to production, qa and staging environments at the same time. You could also cut out the pull and, for instance, push pages from a source control repository. 
+The following example demonstrates how skuid-grunt can be used for automated deployments to multiple orgs. For example, you might see this in a CD (Continuous Deployment) process which pulls pages from a developer org and pushes them out to production, qa and staging environments at the same time. You could also cut out the pull and, for instance, push pages from a source control repository.
 ```js
 module.exports = function(grunt){
 
@@ -74,7 +74,7 @@ module.exports = function(grunt){
 $ grunt skuid-push:single --page="SomeSingleSkuidPage.xml"
 ```
 
-One of the great things about Grunt is that your Gruntfile is interperated at runtime. This allows you to build dynamic tasks and targets using Grunt's options framework and plain old JavaScript. Below you will see how we can configure a Grunt target to push one or more pages to an org based on options passed at runtime!
+One of the great things about Grunt is that your Gruntfile is interpreted at runtime. This allows you to build dynamic tasks and targets using Grunt's options framework and plain old JavaScript. Below you will see how we can configure a Grunt target to push one or more pages to an org based on options passed at runtime!
 ```js
 module.exports = function(grunt){
 
@@ -95,14 +95,14 @@ module.exports = function(grunt){
          'files': {
          	//after the Gruntfile is evaluated, src will equal
          	//either the globbing pattern specified with the --page
-         	//option (if avaliable) or fall back to all pages 
+         	//option (if avaliable) or fall back to all pages
          	'src': [grunt.option('page') || 'skuidpages/*']
          }
       }
     }
   });
 
-  //register 
+  //register
   grunt.registerTask('push-single-page', ['skuid-push:single']);
 
   grunt.loadNpmTasks('skuid-grunt');
