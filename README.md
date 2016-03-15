@@ -61,7 +61,7 @@ module.exports = function(grunt){
     },
     'skuid-push':{
       'options': orgOptions,
-      'production':{
+      'dev':{
          'files':{
             src: ['skuidpages/Module1*']
          }
@@ -135,4 +135,3 @@ The configuration for this task is the same as ```skuid-pull```, however, the re
 }
 
 ```
-
