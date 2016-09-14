@@ -163,6 +163,7 @@ module.exports = function(grunt) {
 						}
 					});
 					grunt.log.ok('Page Pack pulled and written to ' + options.dest);
+					done();
 
 				})
 				.error(function(error) {
