@@ -1,19 +1,19 @@
-#skuid-grunt
+# skuid-grunt
 
 **skuid-grunt** is a toolkit that enables developers working with Skuid to extend their development processes to their Skuid pages.
 
-##Purpose
+## Purpose
 At Skuid, we eat our own dogfood. The Skuid interface is built using the very software we produce. **skuid-grunt** was born to help our developers easily version and release Skuid pages. Not only does this support our development process, but it also affords you, our customer, the unique opportunity to bring your Skuid pages into the same source control as the rest of your Salesforce code.
 
-##How it works
+## How it works
 With the release of Banzai Update 7, the Skuid app now includes a REST API for working with Skuid pages. This API gives you a way to "push" and "pull" Skuid pages to and from any org with Banzai Update 7 (or above) installed. When pulling your Skuid pages, 2 files will be created in the directory you specify; a JSON file and an XML file. See the ```skuid-pull``` task for further information. These files can then be used to push your Skuid pages into the same or any other org running Skuid.
 
-##Features
+## Features
 * Pull Skuid pages from any Salesforce org into your local filesystem.
 * Push Skuid pages from a local filesystem to any Salesforce org.
 * Generate a Skuid Page Pack that can be shared across orgs.
 
-##Requirements
+## Requirements
 
 * [Node.js](https://nodejs.org/)
 * [Grunt](http://gruntjs.com/getting-started)
@@ -25,17 +25,17 @@ You must also have a Salesforce **Connected App** setup in order for **skuid-gru
 
 Once you've saved your Connected App, you'll be presented with fields containing your newly-created OAuth client's "Consumer Key" and "Consumer Secret". You'll need to copy and paste these into your Gruntfile in the ```orgOptions``` object's ```clientId``` and ```clientSecret``` properties, respectively. 
 
-##Installation
+## Installation
 From your Force.com project's root directory, run the following to install **skuid-grunt**:
 
 ```bash
 $ npm install skuid-grunt --save-dev
 ```
 
-##Setup
+## Setup
 Next, you'll need to create a Gruntfile (or modify your existing one) to configure **skuid-grunt** and add Grunt tasks.
 
-###Example Gruntfile
+### Example Gruntfile
 ```js
 module.exports = function(grunt){
   /*
@@ -79,25 +79,25 @@ module.exports = function(grunt){
 
 *[Visit this link for more info about configuring Grunt Tasks](http://gruntjs.com/configuring-tasks)* 
 
-##Running skuid-grunt
+## Running skuid-grunt
 
-###Retrieving Skuid Pages from an org
+### Retrieving Skuid Pages from an org
 
 ```bash
 $ grunt skuid-pull:dev
 ```
 Assuming the above Gruntfile, all Skuid Pages in module `Module1` will be pulled down into your Force.com project into a `skuidpages` directory. This is entirely customizable: you can pull the pages into whatever directory you'd like.
 
-###Pushing Skuid Pages into an org
+### Pushing Skuid Pages into an org
 
 ```bash
 $ grunt skuid-push:production
 ```
 Assuming the above Gruntfile, all Skuid Pages in module `Module1` in your skuidpages/ directory will be pushed into the target org. Pages are uniquely identified by their Unique Id field. Any pages that do not exist in the destination org will be created; existing pages will be updated.
 
-##Task Configuration
+## Task Configuration
 
-###skuid-pull
+### skuid-pull
 Pull Skuid pages from any Salesforce org with Skuid installed. This task will create 2 files per Skuid page for each module you specify. These files will be named ```ModuleName_PageName.json``` & ```ModuleName_PageName.xml```. The XML file is your Skuid page. You can copy that file and paste it directly into the Skuid XML Editor. The JSON file is additional metadata about your Skuid page that will be used in the **skuid-push** task.
 
 * ```options.dest```: [String|Optional] The target directory where your page files will be written
@@ -108,7 +108,7 @@ Pull Skuid pages from any Salesforce org with Skuid installed. This task will cr
 * ```options.module```: [String or Array| Required] The Module(s) you want to pull down.
 * ```options.nforceOptions```: [Object|Optional] Any additional [nforce](https://github.com/kevinohara80/nforce) options you wish to use
 
-###skuid-push
+### skuid-push
 Push Skuid pages from your local directory whether you just pulled them down or have checked out your code from source control. This task will take the page definitions that you specify in ```src``` and push them to your Salesforce org. Once the task is finished, you can log into you org and begin working directly on those pages!
 
 * ```files.src```: [String or Array|Required] Path to directory that stores your Skuid page definitions, [examples here](http://gruntjs.com/configuring-tasks#files)
@@ -118,7 +118,7 @@ Push Skuid pages from your local directory whether you just pulled them down or 
 * ```options.password```: [String|Required] The password of the org you wish to connect 
 * ```options.nforceOptions```: [Object|Optional] Any additional [nforce](https://github.com/kevinohara80/nforce) options you wish to use
 
-###skuid-page-pack
+### skuid-page-pack
 The configuration for this task is the same as ```skuid-pull```, however, the resulting file will be in the Page Pack format. This is a condensed format that can be included as a Static Resource. For information about how to use Page Packs with Skuid visit [this link](http://help.skuidify.com/m/page-assignments-and-overrides/l/245955-import-export-page-packs-and-modules). There are 2 extra options to use with this task. They are:
 * ```options.extension```: [String|Optional] defaults to ```.json```. The extension that will be applied to the file. Use ```.resource``` for Static Resource format.
 * ```options.nameMap```: [Object|Optional] Create a map from module name to desired filename. Example:
