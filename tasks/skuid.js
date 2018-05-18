@@ -82,7 +82,7 @@ module.exports = function(grunt) {
 			//from happening
 			var options = this.options({
 				'module': [],
-				'name': [],
+				'page': [],
 				'dest': 'src/skuidpages/',
 				'mode': 'single',
 				'redirectUri': 'http://localhost:3000/oauth/_callback',
@@ -93,8 +93,8 @@ module.exports = function(grunt) {
 				options.module = options.module.join(',');
 			}
 
-			if (_.isArray(options.name)){
-				options.name = options.name.join(',');
+			if (_.isArray(options.page)){
+				options.page = options.page.join(',');
 			}
 
 			var org = nforce.createConnection(helpers.getOrgOptions(options));
@@ -106,7 +106,7 @@ module.exports = function(grunt) {
 						method: 'GET',
 						urlParams: {
 							module: options.module,
-							name: options.name
+							page: options.page
 						}
 					});
 				})
