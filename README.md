@@ -106,6 +106,7 @@ Pull Skuid pages from any Salesforce org with Skuid installed. This task will cr
 * ```options.username```: [String|Required] The username of the org you wish to connect
 * ```options.password```: [String|Required] The password of the org you wish to connect 
 * ```options.module```: [String or Array| Required] The Module(s) you want to pull down.
+* ```options.page```: [String or Array| Required] The Page(s) you want to pull down (**Requires Skuid Version 11.2 or higher**).
 * ```options.nforceOptions```: [Object|Optional] Any additional [nforce](https://github.com/kevinohara80/nforce) options you wish to use
 
 ###skuid-push

@@ -82,6 +82,7 @@ module.exports = function(grunt) {
 			//from happening
 			var options = this.options({
 				'module': [],
+				'page': [],
 				'dest': 'src/skuidpages/',
 				'mode': 'single',
 				'redirectUri': 'http://localhost:3000/oauth/_callback',
@@ -92,6 +93,10 @@ module.exports = function(grunt) {
 				options.module = options.module.join(',');
 			}
 
+			if (_.isArray(options.page)){
+				options.page = options.page.join(',');
+			}
+
 			var org = nforce.createConnection(helpers.getOrgOptions(options));
 
 			org.authenticate(helpers.getOrgCredentials(options))
@@ -100,7 +105,8 @@ module.exports = function(grunt) {
 						uri: apexEndpoint,
 						method: 'GET',
 						urlParams: {
-							module: options.module
+							module: options.module,
+							page: options.page
 						}
 					});
 				})
