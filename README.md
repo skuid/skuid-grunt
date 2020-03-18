@@ -2,6 +2,15 @@
 
 **skuid-grunt** is a toolkit that enables developers working with Skuid to extend their development processes to their Skuid pages.
 
+## Other tools
+
+Since publishing `skuid-grunt`, we've also built other tools to help with Skuid development. These tools have largely superseded `skuid-grunt`, though you may still find it useful if you have a `grunt` based workflow.
+
+Otherwise, we encourage you try the following:
+
+- `skuid-sfdx`: A [Salesforce CLI](https://developer.salesforce.com/tools/sfdxcli) plugin that can retrieve and deploy Skuid for Salesforce metadata on the **Salesforce platform**. For more information, [see the `skuid-sfdx` repository.](https://github.com/skuid/skuid-sfdx/)
+- `skuid CLI`: A command line interface for retrieving and deploying Skuid metadata for **Skuid Platform**. For more information, [see the `skuid CLI` repository.](https://github.com/skuid/skuid-cli/)
+
 ## Purpose
 At Skuid, we eat our own dogfood. The Skuid interface is built using the very software we produce. **skuid-grunt** was born to help our developers easily version and release Skuid pages. Not only does this support our development process, but it also affords you, our customer, the unique opportunity to bring your Skuid pages into the same source control as the rest of your Salesforce code.
 
